@@ -5,7 +5,7 @@ jobs:
     working_directory: ~/DjangoBrothers-blog
     docker:
       - image: circleci/python:3.8.3
-      - image: circleci/postgres:latest
+      - image: circleci/postgres:12.3
     steps:
       - checkout
       - run: sudo chown -R circleci:circleci /usr/local/bin
