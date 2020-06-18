@@ -1,0 +1,7 @@
+Django>=2.2, <3.0
+psycopg2
+factory-boy
+django-environ
+django-bootstrap4
+djangorestframework
+gunicorn
