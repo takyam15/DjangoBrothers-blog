@@ -1,11 +1,10 @@
-version: 2.1
+version: 2
 
 jobs:
   build:
     docker:
       - image: circleci/python:3.8.3
-        environment:
-         DEBUG: true
+      - image: circleci/postgres:latest
     steps:
       - checkout
       - run:
