@@ -4,8 +4,7 @@ jobs:
   build:
     docker:
       - image: circleci/python:3.8.3
-      - image: circleci/postgres
-      - image: circleci/nginx
+      - image: circleci/postgres:latest
     steps:
       - checkout
       - run:
