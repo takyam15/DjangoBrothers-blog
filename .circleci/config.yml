@@ -6,9 +6,6 @@ jobs:
     docker:
       - image: circleci/python:3.8.3
       - image: circleci/postgres:latest
-        environment:
-          POSTGRES_USER: root
-          POSTGRES_DB: circle_db
     steps:
       - checkout
       - run: sudo chown -R circleci:circleci /usr/local/bin
