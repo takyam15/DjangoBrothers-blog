@@ -34,3 +34,8 @@ jobs:
             python3 manage.py makemigrations
             python3 manage.py migrate
             python3 manage.py test
+      - store_test_results:
+          path: test-results
+      - store_artifacts:
+          path: test-results
+          destination: tr1
