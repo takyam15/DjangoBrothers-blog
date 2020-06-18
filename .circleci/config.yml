@@ -27,8 +27,8 @@ jobs:
       - run:
           command: |
             . venv/bin/activate
-            echo $ENV_FILE | base64 --decode > .env
-            echo $ENV_DB_FILE | base64 --decode > .env_db
+            echo $ENV_FILE | base64 -di > .env
+            echo $ENV_DB_FILE | base64 -di > .env_db
             python3 manage.py makemigrations
             python3 manage.py migrate
             python3 manage.py test
