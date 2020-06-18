@@ -8,6 +8,10 @@ jobs:
       - image: circleci/postgres:12.3
     steps:
       - checkout
+      - run:
+        command: |
+          echo $ENV_FILE | base64 -di > .env
+          echo $ENV_DB_FILE | base64 -di > .env_db
       - run: sudo chown -R circleci:circleci /usr/local/bin
       - run: sudo chown -R circleci:circleci /usr/local/lib/python3.8/site-packages
       - restore_cache:
@@ -27,8 +31,6 @@ jobs:
       - run:
           command: |
             . venv/bin/activate
-            echo $ENV_FILE | base64 -di > .env
-            echo $ENV_DB_FILE | base64 -di > .env_db
             python3 manage.py makemigrations
             python3 manage.py migrate
             python3 manage.py test
