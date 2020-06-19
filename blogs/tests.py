@@ -21,11 +21,31 @@ class BlogFactory(factory.django.DjangoModelFactory):
         model = Blog
 
 
+# Tests for the views
+
 class TestIndex(TestCase):
     def test_get(self):
-        blog_1 = BlogFactory()
-        blog_2 = BlogFactory()
+        blog_1 = BlogFactory(slug='first-post')
+        blog_2 = BlogFactory(slug='second-post')
         res = self.client.get(reverse('blogs:index'))
         blogs = res.context['blogs']
         self.assertTemplateUsed(res, 'blogs/index.html')
         self.assertEqual(len(blogs), 2)
+        self.assertEqual(blogs[0].slug, 'second-post')
+        self.assertEqual(blogs[1].slug, 'first-post')
+
+
+class TestDetail(TestCase):
+    def test_get(self):
+        blog = BlogFactory(
+            title='Sample post',
+            slug='post'
+        )
+        res = self.client.get(reverse('blogs:detail', kwargs={'slug': 'post'}))
+        blog = res.context['blog']
+        self.assertTemplateUsed(res, 'blogs/detail.html')
+        self.assertEqual(blog.title, 'Sample post')
+
+    def test_404(self):
+        res = self.client.get(reverse('blogs:detail', kwargs={'slug': 'post'}))
+        self.assertEqual(res.status_code, 404)
