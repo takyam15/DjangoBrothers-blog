@@ -1,37 +1,46 @@
 <!DOCTYPE html>
 
-<html>
+<html lang="ja">
+
+{% load static %}
 
 
 
-<head>
+  <head>
 
 
-  <title>ブログアプリ</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    {% bootstrap_css %}
+
+    <title>ブログアプリ</title>
 
 
-</head>
+  </head>
 
 
 
-<body>
+  <body>
 
 
-  <h1 style="text-align: center;">{{ blog.title }}</h1>
+    <h1 style="text-align: center;">{{ blog.title }}</h1>
 
-  <div style="width: 70%;margin: 0px auto;">
-    <div>
-      <div style="margin: 60px 20px;">
-        {{ blog.text | urlize | linebreaksbr }}
-      </div>
-      <div style="text-align: center; margin-top: 50px">
-        <a href="{% url 'blogs:index' %}">トップページに戻る</a>
+    <div style="width: 70%;margin: 0px auto;">
+      <div>
+        <div style="margin: 60px 20px;">
+          {{ blog.text | urlize | linebreaksbr }}
+        </div>
+        <div style="text-align: center; margin-top: 50px">
+          <a href="{% url 'blogs:index' %}">トップページに戻る</a>
+        </div>
       </div>
     </div>
-  </div>
+
+    {% bootstrap_javascript jquery='full' %}
 
 
-</body>
+  </body>
 
 
 
