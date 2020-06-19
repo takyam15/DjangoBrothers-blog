@@ -1,6 +1,12 @@
 from django.shortcuts import get_object_or_404, render
+from rest_framework.generics import (
+    ListAPIView, RetrieveAPIView,
+)
 
 from .models import Blog
+from .serializers import (
+    BlogListSerializer, BlogRetrieveSerializer,
+)
 
 
 # Create your views here.
@@ -17,9 +23,12 @@ def detail(request, slug):
     return render(request, 'blogs/detail.html', context)
 
 
-def api_index(request):
-    pass
+class BlogListAPI(ListAPIView):
+    queryset = Blog.objects.all()
+    serializer_class = BlogListSerializer
 
 
-def api_detail(request, slug):
-    pass
+class BlogRetrieveAPI(RetrieveAPIView):
+    queryset = Blog.objects.all()
+    serializer_class = BlogRetrieveSerializer
+    lookup_field = 'slug'
