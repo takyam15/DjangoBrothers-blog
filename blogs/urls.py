@@ -21,5 +21,5 @@ from . import views
 app_name = 'blogs'
 urlpatterns = [
     path('', views.index, name='index'),
-    path('detail/<slug:slug>/', views.detail, name='detail'),
+    path('<slug:slug>/', views.detail, name='detail'),
 ]
