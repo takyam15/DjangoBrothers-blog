@@ -14,7 +14,7 @@ jobs:
           POSTGRES_DB: circle_test
           POSTGRES_PASSWORD: circle_test
           TZ: Asia/Tokyo
-        port: "5433:5432"
+        port: 5433:5432
     steps:
       - checkout
       - run: sudo chown -R circleci:circleci /usr/local/bin
