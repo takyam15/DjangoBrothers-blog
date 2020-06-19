@@ -22,4 +22,6 @@ app_name = 'blogs'
 urlpatterns = [
     path('', views.index, name='index'),
     path('<slug:slug>/', views.detail, name='detail'),
+    path('api/posts/', views.BlogListAPI.as_view(), name='api_index'),
+    path('api/posts/<slug:slug>/', views.BlogRetrieveAPI.as_view(), name='api_detail'),
 ]
