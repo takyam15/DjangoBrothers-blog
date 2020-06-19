@@ -5,10 +5,15 @@ jobs:
     working_directory: ~/DjangoBrothers-blog
     docker:
       - image: circleci/python:3.8.3
-      - image: circleci/postgres:latest
+        environment:
+          PYTHONUNBUFFERED: 1
+          TZ: Asia/Tokyo
+      - image: circleci/postgres:12.3
         environment:
           POSTGRES_USER: root
-          POSTGRES_DB: circle_db
+          POSTGRES_DB: circle_test
+          POSTGRES_PASSWORD: circle_test
+          TZ: Asia/Tokyo
     steps:
       - checkout
       - run: sudo chown -R circleci:circleci /usr/local/bin
@@ -28,9 +33,14 @@ jobs:
             - "/usr/local/bin"
             - "/usr/local/lib/python3.8/site-packages"
       - run:
-          name: Running tests
           command: |
             . venv/bin/activate
+            echo $ENV_FILE | base64 -di > .env
             python3 manage.py makemigrations
             python3 manage.py migrate
             python3 manage.py test
+      - store_test_results:
+          path: test-results
+      - store_artifacts:
+          path: test-results
+          destination: tr1
