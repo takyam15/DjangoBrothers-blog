@@ -15,3 +15,11 @@ def detail(request, slug):
     blog = get_object_or_404(Blog, slug=slug)
     context = {'blog': blog}
     return render(request, 'blogs/detail.html', context)
+
+
+def api_index(request):
+    pass
+
+
+def api_detail(request, slug):
+    pass
