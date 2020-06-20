@@ -28,7 +28,7 @@
 
     <div style="width: 70%;margin: 0px auto;">
       <hr />
-      {% for blog in blogs %}
+      {% for blog in blog_list %}
       <div>
         <h3>{{ blog.title }}</h3>
         <div>{{ blog.text | truncatechars:100 }}</div>

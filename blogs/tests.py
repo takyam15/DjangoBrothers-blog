@@ -23,19 +23,19 @@ class BlogFactory(factory.django.DjangoModelFactory):
 
 # Tests for the views
 
-class TestIndex(TestCase):
+class TestBlogList(TestCase):
     def test_get(self):
         blog_1 = BlogFactory(slug='first-post')
         blog_2 = BlogFactory(slug='second-post')
         res = self.client.get(reverse('blogs:index'))
-        blogs = res.context['blogs']
+        blogs = res.context['blog_list']
         self.assertTemplateUsed(res, 'blogs/index.html')
         self.assertEqual(len(blogs), 2)
         self.assertEqual(blogs[0].slug, 'second-post')
         self.assertEqual(blogs[1].slug, 'first-post')
 
 
-class TestDetail(TestCase):
+class TestBlogDetail(TestCase):
     def test_get(self):
         blog = BlogFactory(
             title='Sample post',
