@@ -17,6 +17,7 @@ from .serializers import (
 class BlogList(ListView):
     model = Blog
     template_name = 'blogs/index.html'
+    paginate_by = 10
 
 
 class BlogDetail(DetailView):
