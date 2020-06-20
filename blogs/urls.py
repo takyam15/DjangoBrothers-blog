@@ -15,13 +15,15 @@ Including another URLconf
 """
 from django.urls import path
 
-from . import views
+from .views import (
+    BlogList, BlogDetail, BlogListAPI, BlogRetrieveAPI,
+)
 
 
 app_name = 'blogs'
 urlpatterns = [
-    path('', views.index, name='index'),
-    path('<slug:slug>/', views.detail, name='detail'),
-    path('api/posts/', views.BlogListAPI.as_view(), name='api_index'),
-    path('api/posts/<slug:slug>/', views.BlogRetrieveAPI.as_view(), name='api_detail'),
+    path('', BlogList.as_view(), name='index'),
+    path('<slug:slug>/', BlogDetail.as_view(), name='detail'),
+    path('api/posts/', BlogListAPI.as_view(), name='api_index'),
+    path('api/posts/<slug:slug>/', BlogRetrieveAPI.as_view(), name='api_detail'),
 ]

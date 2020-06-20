@@ -1,4 +1,7 @@
 from django.shortcuts import get_object_or_404, render
+from django.views.generic import (
+    ListView, DetailView,
+)
 from rest_framework.generics import (
     ListAPIView, RetrieveAPIView,
 )
@@ -11,16 +14,14 @@ from .serializers import (
 
 # Create your views here.
 
-def index(request):
-    blogs = Blog.objects.all()
-    context = {'blogs': blogs}
-    return render(request, 'blogs/index.html', context)
+class BlogList(ListView):
+    model = Blog
+    template_name = 'blogs/index.html'
 
 
-def detail(request, slug):
-    blog = get_object_or_404(Blog, slug=slug)
-    context = {'blog': blog}
-    return render(request, 'blogs/detail.html', context)
+class BlogDetail(DetailView):
+    model = Blog
+    template_name = 'blogs/detail.html'
 
 
 class BlogListAPI(ListAPIView):
