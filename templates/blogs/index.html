@@ -41,6 +41,9 @@
       <p>まだ記事が投稿されていません。</p>
       <hr />
       {% endfor %}
+
+      {% include 'blogs/includes/paginator.html' %}
+      
     </div>
 
     {% bootstrap_javascript jquery='full' %}
