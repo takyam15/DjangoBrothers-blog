@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+
+<html lang="ja">
+
+{% load static %}
+
+
+
+  <head>
+
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    {% bootstrap_css %}
+
+    <title>ブログ管理サイト</title>
+
+
+  </head>
+
+
+
+  <body>
+
+
+    <h1 style="text-align: center;">My Blog</h1>
+
+    <div style="width: 70%;margin: 0px auto;">
+      <hr />
+      {% for blog in blogs %}
+      <div>
+        <h3>{{ blog.title }}</h3>
+        <div>{{ blog.text | truncatechars:100 }}</div>
+        <div style="text-align: right;">
+          <a href="{% url 'blogs:detail' slug=blog.slug %}">記事を読む</a>
+        </div>
+      </div>
+      <hr />
+      {% empty %}
+      <p>まだ記事が投稿されていません。</p>
+      <hr />
+      {% endfor %}
+    </div>
+
+    {% bootstrap_javascript jquery='full' %}
+
+
+  </body>
+
+</html>
