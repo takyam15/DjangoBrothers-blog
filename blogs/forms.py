@@ -15,7 +15,6 @@ class BlogSearchForm(forms.Form):
     )
 
     def filter_blogs(self, blogs):
-
         if self.is_valid():
             keyword = self.cleaned_data.get('keyword')
             if keyword:
