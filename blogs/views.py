@@ -1,4 +1,3 @@
-from django.db.models import Q
 from django.shortcuts import get_object_or_404, render
 from django.views.generic import (
     ListView, DetailView,
@@ -21,23 +20,16 @@ class BlogList(ListView):
     template_name = 'blogs/index.html'
     paginate_by = 10
 
+    def get_queryset(self):
+        form = BlogSearchForm(self.request.GET)
+        queryset = super().get_queryset()
+        queryset = form.filter_blogs(queryset)
+        return queryset
+
     def get_context_data(self):
         context = super().get_context_data()
         context['search_form'] = BlogSearchForm(self.request.GET)
         return context
-
-    def get_queryset(self):
-        form = BlogSearchForm(self.request.GET)
-        queryset = super().get_queryset()
-
-        if form.is_valid():
-            keyword = form.cleaned_data.get('keyword')
-            if keyword:
-                queryset = queryset.filter(
-                    Q(title__icontains=keyword) | Q(text__icontains=keyword)
-                )
-
-        return queryset
 
 
 class BlogDetail(DetailView):
