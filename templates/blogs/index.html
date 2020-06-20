@@ -24,10 +24,38 @@
   <body>
 
 
-    <h1 style="text-align: center;">My Blog</h1>
+    <h1 class="text-center my-5"><a href="{% url 'blogs:index' %}" class="text-dark">My Blog</a></h1>
 
-    <div style="width: 70%;margin: 0px auto;">
+    <div class="container mx-auto">
+
+      <form action="" class="form-inline">
+
+        {% if search_form.non_field_errors %}
+        <div class="error-list text-danger font-weight-bold">
+          {% for error in search_form.non_field_errors %}
+            {{ error }}
+          {% endfor %}
+        </div>
+        {% endif %}
+
+        {% for field in search_form %}
+        <div class="form-group">
+          {{ field.label_tag }}
+          {{ field }}
+          {% if field.errors %}
+          <div class="error-list text-danger font-weight-bold">
+            {% for error in field.errors %}
+              {{ error }}
+            {% endfor %}
+          </div>
+          {% endif %}
+        </div>
+        {% endfor %}
+        <button type="submit" class="btn btn-outline-primary">検索</button>
+      </form>
+
       <hr />
+
       {% for blog in blog_list %}
       <div>
         <h3>{{ blog.title }}</h3>

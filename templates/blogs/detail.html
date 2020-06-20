@@ -24,14 +24,14 @@
   <body>
 
 
-    <h1 style="text-align: center;">{{ blog.title }}</h1>
+    <h1 class="text-center my-5">{{ blog.title }}</h1>
 
-    <div style="width: 70%;margin: 0px auto;">
+    <div class="container mx-auto">
       <div>
-        <div style="margin: 60px 20px;">
+        <div class="mx-3 my-5">
           {{ blog.text | urlize | linebreaksbr }}
         </div>
-        <div style="text-align: center; margin-top: 50px">
+        <div class="text-center mt-5">
           <a href="{% url 'blogs:index' %}">トップページに戻る</a>
         </div>
       </div>
