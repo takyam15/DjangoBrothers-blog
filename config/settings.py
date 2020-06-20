@@ -73,12 +73,9 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
-<<<<<<< HEAD
-=======
             'builtins':[ 
                 'bootstrap4.templatetags.bootstrap4',
             ],
->>>>>>> origin/master
         },
     },
 ]
@@ -140,10 +137,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-<<<<<<< HEAD
-=======
 # MEDIA_URL = '/media/'
 # MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
->>>>>>> origin/master
 AUTH_USER_MODEL = 'blogs.Author'

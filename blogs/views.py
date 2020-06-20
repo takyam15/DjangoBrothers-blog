@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-from django.shortcuts import render
-
-# Create your views here.
-=======
 from django.shortcuts import get_object_or_404, render
 from rest_framework.generics import (
     ListAPIView, RetrieveAPIView,
@@ -37,4 +32,3 @@ class BlogRetrieveAPI(RetrieveAPIView):
     queryset = Blog.objects.all()
     serializer_class = BlogRetrieveSerializer
     lookup_field = 'slug'
->>>>>>> origin/master

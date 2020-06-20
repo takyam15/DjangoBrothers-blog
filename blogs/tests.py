@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-from django.test import TestCase
-
-# Create your tests here.
-=======
 import factory
 from django.test import TestCase
 from django.urls import reverse
@@ -54,4 +49,3 @@ class TestDetail(TestCase):
     def test_404(self):
         res = self.client.get(reverse('blogs:detail', kwargs={'slug': 'post'}))
         self.assertEqual(res.status_code, 404)
->>>>>>> origin/master
