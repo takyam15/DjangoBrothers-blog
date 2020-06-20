@@ -78,6 +78,36 @@ class TestBlogList(TestCase):
         self.assertEqual(len(blogs), 2)
         self.assertIsNotNone(form)
 
+    def test_get_paginate(self):
+        blog_1 = BlogFactory(slug='post-1')
+        blog_2 = BlogFactory(slug='post-2')
+        blog_3 = BlogFactory(slug='post-3')
+        blog_4 = BlogFactory(slug='post-4')
+        blog_5 = BlogFactory(slug='post-5')
+        blog_6 = BlogFactory(slug='post-6')
+        blog_7 = BlogFactory(slug='post-7')
+        blog_8 = BlogFactory(slug='post-8')
+        blog_9 = BlogFactory(slug='post-9')
+        blog_10 = BlogFactory(slug='post-10')
+        blog_11 = BlogFactory(slug='post-11')
+        res_1 = self.client.get(reverse('blogs:index'), data={'page': 1})
+        res_2 = self.client.get(reverse('blogs:index'), data={'page': 2})
+        self.assertTemplateUsed(res_1, 'blogs/index.html')
+        self.assertTemplateUsed(res_2, 'blogs/index.html')
+        self.assertContains(res_1, 'post-11')
+        self.assertContains(res_1, 'post-2')
+        self.assertContains(res_2, 'post-1')
+
+    def test_get_invalid_page(self):
+        blog = BlogFactory()
+        res = self.client.get(reverse('blogs:index'), data={'page': 'invalid'})
+        self.assertEqual(res.status_code, 404)
+
+    def test_get_invalid_page_number(self):
+        blog = BlogFactory()
+        res = self.client.get(reverse('blogs:index'), data={'page': 2})
+        self.assertEqual(res.status_code, 404)
+
 
 class TestBlogDetail(TestCase):
     def test_get(self):
