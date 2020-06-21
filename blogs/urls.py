@@ -19,7 +19,6 @@ from .views import (
     BlogList, BlogDetail, BlogListAPI, BlogRetrieveAPI,
 )
 
-
 app_name = 'blogs'
 urlpatterns = [
     path('', BlogList.as_view(), name='index'),
