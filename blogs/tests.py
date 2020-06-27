@@ -23,7 +23,7 @@ class BlogFactory(factory.django.DjangoModelFactory):
 
 # Tests for the forms
 
-class TestBlogSearchForm(TestCase):
+class BlogSearchFormTests(TestCase):
     def test_filter_blogs(self):
         blog_1 = BlogFactory(
             title='First post', slug='first-post', text='This blog is opened.'
@@ -58,25 +58,38 @@ class TestBlogSearchForm(TestCase):
 
 # Tests for the views
 
-class TestBlogList(TestCase):
-    def test_get(self):
+class BlogListTests(TestCase):
+    def test_get_single_blog(self):
+        blog = BlogFactory(title='Single post')
+        res = self.client.get('blogs:index')
+        self.assertTemplateUsed(res, 'blogs/index.html')
+        self.assertQuerysetEqual(
+            res.context['blog_list'],
+            ['<Blog: Single post>']
+        )
+        self.assertIsNotNone(res.context['search_form'])
+
+    def test_get_two_blogs(self):
+        blog_1 = BlogFactory(title='First post', slug='first-post')
+        blog_2 = BlogFactory(title='Second post', slug='second-post')
+        blogs = Blog.objects.all()
         res = self.client.get(reverse('blogs:index'))
         self.assertTemplateUsed(res, 'blogs/index.html')
+        self.assertQuerysetEqual(
+            res.context['blog_list'],
+            ['<Blog: First post>', '<Blog: Second post>']
+        )
+        self.assertIsNotNone(res.context['search_form'])
 
-    def test_get_queryset(self):
-        blog_1 = BlogFactory(slug='first-post')
-        blog_2 = BlogFactory(slug='second-post')
-        blogs = Blog.objects.all()
-        self.assertEqual(len(blogs), 2)
-
-    def test_get_context_data(self):
-        blog_1 = BlogFactory(slug='first-post')
-        blog_2 = BlogFactory(slug='second-post')
+    def test_get_empty_blog(self):
         res = self.client.get(reverse('blogs:index'))
-        blogs = res.context['blog_list']
-        form = res.context['search_form']
-        self.assertEqual(len(blogs), 2)
-        self.assertIsNotNone(form)
+        self.assertTemplateUsed(res, 'blogs/index.html')
+        self.assertContains(res, '表示する記事がありません。')
+        self.assertQuerysetEqual(
+            res.context['blog_list'],
+            []
+        )
+        self.assertIsNotNone(res.context['search_form'])
 
     def test_get_paginate(self):
         blog_1 = BlogFactory(slug='post-1')
@@ -109,7 +122,7 @@ class TestBlogList(TestCase):
         self.assertEqual(res.status_code, 404)
 
 
-class TestBlogDetail(TestCase):
+class BlogDetailTests(TestCase):
     def test_get(self):
         blog = BlogFactory(
             title='Sample post',
