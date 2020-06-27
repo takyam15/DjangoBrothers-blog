@@ -72,7 +72,6 @@ class BlogListTests(TestCase):
     def test_get_two_blogs(self):
         blog_1 = BlogFactory(title='First post', slug='first-post')
         blog_2 = BlogFactory(title='Second post', slug='second-post')
-        blogs = Blog.objects.all()
         res = self.client.get(reverse('blogs:index'))
         self.assertTemplateUsed(res, 'blogs/index.html')
         self.assertQuerysetEqual(
@@ -124,14 +123,10 @@ class BlogListTests(TestCase):
 
 class BlogDetailTests(TestCase):
     def test_get(self):
-        blog = BlogFactory(
-            title='Sample post',
-            slug='post'
-        )
+        blog = BlogFactory(title='Example post', slug='post')
         res = self.client.get(reverse('blogs:detail', kwargs={'slug': 'post'}))
-        blog = res.context['blog']
         self.assertTemplateUsed(res, 'blogs/detail.html')
-        self.assertEqual(blog.title, 'Sample post')
+        self.assertEqual(res.context['blog'].title, 'Example post')
 
     def test_404(self):
         res = self.client.get(reverse('blogs:detail', kwargs={'slug': 'post'}))
