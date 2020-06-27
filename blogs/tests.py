@@ -61,7 +61,7 @@ class BlogSearchFormTests(TestCase):
 class BlogListTests(TestCase):
     def test_get_single_blog(self):
         blog = BlogFactory(title='Single post')
-        res = self.client.get('blogs:index')
+        res = self.client.get(reverse('blogs:index'))
         self.assertTemplateUsed(res, 'blogs/index.html')
         self.assertQuerysetEqual(
             res.context['blog_list'],
@@ -77,7 +77,7 @@ class BlogListTests(TestCase):
         self.assertTemplateUsed(res, 'blogs/index.html')
         self.assertQuerysetEqual(
             res.context['blog_list'],
-            ['<Blog: First post>', '<Blog: Second post>']
+            ['<Blog: Second post>', '<Blog: First post>']
         )
         self.assertIsNotNone(res.context['search_form'])
 
