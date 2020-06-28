@@ -2,6 +2,8 @@ import factory
 from django.test import TestCase
 from django.urls import reverse
 from django.utils import timezone
+from rest_framework import status
+from rest_framework.test import APITestCase
 
 from .forms import BlogSearchForm
 from .models import Blog
@@ -42,6 +44,7 @@ class BlogSearchFormTests(TestCase):
         )
         form = BlogSearchForm({'keyword': 'first'})
         blogs = form.filter_blogs(Blog.objects.all())
+        self.assertEqual(Blog.objects.count(), 5)
         self.assertEqual(len(blogs), 4)
         self.assertEqual(blogs[0].text, 'The First post has been withdrawn.')
         self.assertEqual(blogs[1].title, 'Dummy first post')
@@ -53,6 +56,7 @@ class BlogSearchFormTests(TestCase):
         blog_2 = BlogFactory(slug='second-post')
         form = BlogSearchForm({'keyword': ''})
         blogs = form.filter_blogs(Blog.objects.all())
+        self.assertEqual(Blog.objects.count(), 2)
         self.assertEqual(len(blogs), 2)
 
 
@@ -63,6 +67,7 @@ class BlogListTests(TestCase):
         blog = BlogFactory(title='Single post')
         res = self.client.get(reverse('blogs:index'))
         self.assertTemplateUsed(res, 'blogs/index.html')
+        self.assertEqual(Blog.objects.count(), 1)
         self.assertQuerysetEqual(
             res.context['blog_list'],
             ['<Blog: Single post>']
@@ -74,6 +79,7 @@ class BlogListTests(TestCase):
         blog_2 = BlogFactory(title='Second post', slug='second-post')
         res = self.client.get(reverse('blogs:index'))
         self.assertTemplateUsed(res, 'blogs/index.html')
+        self.assertEqual(Blog.objects.count(), 2)
         self.assertQuerysetEqual(
             res.context['blog_list'],
             ['<Blog: Second post>', '<Blog: First post>']
@@ -83,6 +89,7 @@ class BlogListTests(TestCase):
     def test_get_empty_blog(self):
         res = self.client.get(reverse('blogs:index'))
         self.assertTemplateUsed(res, 'blogs/index.html')
+        self.assertEqual(Blog.objects.count(), 0)
         self.assertContains(res, '表示する記事がありません。')
         self.assertQuerysetEqual(
             res.context['blog_list'],
@@ -106,6 +113,7 @@ class BlogListTests(TestCase):
         res_2 = self.client.get(reverse('blogs:index'), data={'page': 2})
         self.assertTemplateUsed(res_1, 'blogs/index.html')
         self.assertTemplateUsed(res_2, 'blogs/index.html')
+        self.assertEqual(Blog.objects.count(), 11)
         self.assertContains(res_1, 'post-11')
         self.assertContains(res_1, 'post-2')
         self.assertContains(res_2, 'post-1')
@@ -131,3 +139,20 @@ class BlogDetailTests(TestCase):
     def test_404(self):
         res = self.client.get(reverse('blogs:detail', kwargs={'slug': 'post'}))
         self.assertEqual(res.status_code, 404)
+
+
+class BlogListAPITests(APITestCase):
+    def test_get_blogs_api(self):
+        blog_1 = BlogFactory(title='First post', slug='first-post')
+        blog_2 = BlogFactory(title='Second post', slug='second-post')
+        res = self.client.get(reverse('blogs:api_index'), format='json')
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertEqual(Blog.objects.count(), 2)
+
+
+class BlogRetrieveAPITests(APITestCase):
+    def test_get_blog_api(self):
+        blog = BlogFactory(title='Example post', slug='post')
+        res = self.client.get(reverse('blogs:api_detail', kwargs={'slug': 'post'}), format='json')
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertEqual(res.context['blog'].title, 'Example post')
