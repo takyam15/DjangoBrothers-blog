@@ -118,14 +118,14 @@ class BlogListTests(TestCase):
         self.assertContains(res_1, 'post-2')
         self.assertContains(res_2, 'post-1')
 
-    def test_get_invalid_page(self):
-        blog = BlogFactory()
-        res = self.client.get(reverse('blogs:index'), data={'page': 'invalid'})
-        self.assertEqual(res.status_code, 404)
-
     def test_get_invalid_page_number(self):
         blog = BlogFactory()
         res = self.client.get(reverse('blogs:index'), data={'page': 2})
+        self.assertEqual(res.status_code, 404)
+
+    def test_get_invalid_page_name(self):
+        blog = BlogFactory()
+        res = self.client.get(reverse('blogs:index'), data={'page': 'invalid'})
         self.assertEqual(res.status_code, 404)
 
 
