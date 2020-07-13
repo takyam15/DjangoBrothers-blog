@@ -89,25 +89,74 @@ class BlogListTests(TestCase):
         self.assertIsNotNone(res.context['search_form'])
 
     def test_get_paginate(self):
-        blog_1 = BlogFactory(slug='blog-1')
-        blog_2 = BlogFactory(slug='blog-2')
-        blog_3 = BlogFactory(slug='blog-3')
-        blog_4 = BlogFactory(slug='blog-4')
-        blog_5 = BlogFactory(slug='blog-5')
-        blog_6 = BlogFactory(slug='blog-6')
-        blog_7 = BlogFactory(slug='blog-7')
-        blog_8 = BlogFactory(slug='blog-8')
-        blog_9 = BlogFactory(slug='blog-9')
-        blog_10 = BlogFactory(slug='blog-10')
-        blog_11 = BlogFactory(slug='blog-11')
-        res_1 = self.client.get(reverse('blogs:index'), data={'page': 1})
-        res_2 = self.client.get(reverse('blogs:index'), data={'page': 2})
-        self.assertTemplateUsed(res_1, 'blogs/index.html')
-        self.assertTemplateUsed(res_2, 'blogs/index.html')
+        blog_1 = BlogFactory(
+            title='Blog 1',
+            slug='blog-1'
+        )
+        blog_2 = BlogFactory(
+            title='Blog 2',
+            slug='blog-2'
+        )
+        blog_3 = BlogFactory(
+            title='Blog 3',
+            slug='blog-3'
+        )
+        blog_4 = BlogFactory(
+            title='Blog 4',
+            slug='blog-4'
+        )
+        blog_5 = BlogFactory(
+            title='Blog 5',
+            slug='blog-5'
+        )
+        blog_6 = BlogFactory(
+            title='Blog 6',
+            slug='blog-6'
+        )
+        blog_7 = BlogFactory(
+            title='Blog 7',
+            slug='blog-7'
+        )
+        blog_8 = BlogFactory(
+            title='Blog 8',
+            slug='blog-8'
+        )
+        blog_9 = BlogFactory(
+            title='Blog 9',
+            slug='blog-9'
+        )
+        blog_10 = BlogFactory(
+            title='Blog 10',
+            slug='blog-10'
+        )
+        blog_11 = BlogFactory(
+            title='Blog 11',
+            slug='blog-11'
+        )
+        res_page_1 = self.client.get(reverse('blogs:index'), data={'page': 1})
+        res_page_2 = self.client.get(reverse('blogs:index'), data={'page': 2})
+        self.assertTemplateUsed(res_page_1, 'blogs/index.html')
+        self.assertTemplateUsed(res_page_2, 'blogs/index.html')
         self.assertEqual(Blog.objects.count(), 11)
-        self.assertContains(res_1, 'blog-11')
-        self.assertContains(res_1, 'blog-2')
-        self.assertContains(res_2, 'blog-1')
+        self.assertQuerysetEqual(
+            res_page_1.context['blog_list'],
+            [
+                '<Blog: Blog 11>',
+                '<Blog: Blog 10>',
+                '<Blog: Blog 9>',
+                '<Blog: Blog 8>',
+                '<Blog: Blog 7>',
+                '<Blog: Blog 6>',
+                '<Blog: Blog 5>',
+                '<Blog: Blog 4>',
+                '<Blog: Blog 3>',
+                '<Blog: Blog 2>',
+            ]
+        )
+        self.assertQuerysetEqual(
+            res_page_2.context['blog_list'],
+            ['<Blog: Blog 1>']
+        )
 
     def test_get_non_existent_page_number(self):
         blog = BlogFactory()
