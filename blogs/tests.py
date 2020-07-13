@@ -46,7 +46,7 @@ class BlogSearchFormTests(TestCase):
         form = BlogSearchForm({'keyword': 'first'})
         blogs = form.filter_blogs(Blog.objects.all())
         self.assertEqual(Blog.objects.count(), 5)
-        self.assertEqual(len(blogs), 4)
+        self.assertEqual(blogs.count(), 4)
         self.assertEqual(blogs[0].text, 'The First blog has been withdrawn.')
         self.assertEqual(blogs[1].title, 'Dummy first blog')
         self.assertEqual(blogs[2].text, 'This is not the first blog.')
@@ -58,7 +58,7 @@ class BlogSearchFormTests(TestCase):
         form = BlogSearchForm({'keyword': ''})
         blogs = form.filter_blogs(Blog.objects.all())
         self.assertEqual(Blog.objects.count(), 2)
-        self.assertEqual(len(blogs), 2)
+        self.assertEqual(blogs.count(), 2)
 
 
 # Tests for the views
